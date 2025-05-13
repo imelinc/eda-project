@@ -180,8 +180,10 @@ def domination_of_genres(df, movies_top_ten, tv_shows_top_ten):
         movies_top_ten (_type_): dataframe with the ten countries with the most appereances on movies
         tv_shows_top_ten (_type_): dataframe with the ten countries with the most appereances on tv shows
     """
-
-
+    
+    # Get the top three countries
+    movies_top_three = movies_top_ten.head(3).copy()
+    tv_shows_top_three = tv_shows_top_ten.head(3).copy()
 
 # Load the dataset
 df = pd.read_csv("data/netflix_titles.csv")
