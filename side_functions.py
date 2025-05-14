@@ -4,7 +4,7 @@ def fill_data(df):
     """
     this function fills the missing values in the dataset with "Unknown"
     Args:
-        df (_type_): dataset
+        df (pandas.DataFrame): dataset
     """
     df['director'] = df['director'].fillna('Unknown')
     df['cast'] = df['cast'].fillna('Unknown')
@@ -16,13 +16,17 @@ def fill_data(df):
     return df
 
 def make_pie(top_ten, title, legend_title, file_name):
-    """_summary_
-
-       Args:
-           top_ten (_type_): _description_
-           title (_type_): _description_
-           legend_title (_type_): _description_
-           file_name (_type_): _description_
+    """
+    This function generates a pie chart using the provided data series, applies custom
+    styling with a dark theme, and saves the resulting figure to the 'figs' directory.
+    Args:
+       top_ten (pandas.Series): A pandas Series containing the data to be plotted.
+                                The index of the Series will be used as labels in the legend.
+        title (str): The title to display above the pie chart.
+        legend_title (str): The title to display in the chart legend.
+        file_name (str): Name for the saved file (without extension).
+                        The file will be saved as PNG in the 'figs' directory.
+    
     """
     # colors to be used in the pie chart
     colors = ["#7F1A1A", "#A35E2D", "#625B7F", "#3F7F4A", "#4E4E4E", 
@@ -70,3 +74,20 @@ def make_bar_plot(file, plot_title, xlabel, ylabel, ax, kind):
     ax.tick_params(colors = "white")
     for spine in ax.spines.values():
         spine.set_color("white")
+
+def treemap_customization(fig):
+    fig.update_layout(
+    font=dict(family="Arial", size=20, color="white"),
+    paper_bgcolor="#15130d",
+    plot_bgcolor="#15130d", 
+    width=1300,
+    height=1100
+    )
+
+    fig.update_traces(
+        textfont_color="white",          
+        textfont_size=16,
+        marker=dict(
+            line=dict(width=1, color="white")  
+        )
+    )

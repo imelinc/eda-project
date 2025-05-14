@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-import squarify
+import plotly.express as px
 import side_functions as sf
 
 # Plot the distribution of the different types of genres
@@ -106,14 +106,69 @@ def domination_of_genres(df, movies_top_ten, tv_shows_top_ten):
     which genres are most common on that specific country
 
     Args:
-        df (_type_): dataset
-        movies_top_ten (_type_): dataframe with the ten countries with the most appereances on movies
-        tv_shows_top_ten (_type_): dataframe with the ten countries with the most appereances on tv shows
+        df (pandas.DataFrame): dataset
+        movies_top_ten (pandas.Series): Series with the ten countries with the most appereances on movies
+        tv_shows_top_ten (pandas.Series): Series with the ten countries with the most appereances on tv shows
     """
     
     # Get the top three countries
-    movies_top_three = movies_top_ten.head(3).copy()
-    tv_shows_top_three = tv_shows_top_ten.head(3).copy()
+    movies_top_three = movies_top_ten.head(3).index
+    tv_shows_top_three = tv_shows_top_ten.head(3).index
+    
+    # Preprocessing the dataframe
+    df = df.copy()
+    df['country'] = df['country'].str.split(', ')
+    df['listed_in'] = df['listed_in'].str.split(', ')
+    df = df.explode('country').explode('listed_in')
+    df['country'] = df['country'].str.strip()
+    df['listed_in'] = df['listed_in'].str.strip()
+    
+    # Filter by the top three countries in movies
+    movies_df = df[(df["type"] == "Movie") & (df["country"].isin(movies_top_three))]
+    # Group by countries and genres
+    movies_grouped = movies_df.groupby(["country", "listed_in"]).size().reset_index(name="count")
+    
+    # Filter by the top three countries in tv shows
+    tv_shows_df = df[(df["type"] == "Movie") & (df["country"].isin(tv_shows_top_three))]
+    # Group by counries and genres
+    tv_shows_grouped = tv_shows_df.groupby(["country", "listed_in"]).size().reset_index(name="count")
+    
+    # Plot the treemaps
+    custom_colors = {
+    "United States": "#7F1A1A",
+    "India": "#A35E2D",
+    "United Kingdom": "#625B7F",
+    "Japan" : "#A35E2D"
+    }
+
+    # Add a column to map colors
+    df["Color"] = df["country"].map(custom_colors)
+    
+    fig_movies = px.treemap(
+    movies_grouped,
+    path=['country', 'listed_in'],
+    values='count',
+    title='Top 3 Countries - Genre Domination in Movies',
+    color='country', 
+    color_discrete_map=custom_colors
+    )
+
+    fig_shows = px.treemap(
+        tv_shows_grouped,
+        path=['country', 'listed_in'],
+        values='count',
+        title='Top 3 Countries - Genre Domination in TV Shows',
+        color='country',
+        color_discrete_map=custom_colors
+    )
+
+    
+    sf.treemap_customization(fig_movies)
+    sf.treemap_customization(fig_shows)
+    
+    fig_movies.write_image("figs/movies_treemap.png", scale = 3)
+    fig_shows.write_image("figs/shows_treemap.png", scale = 3)
+        
     
 # Load the dataset
 df = pd.read_csv("data/netflix_titles.csv")
