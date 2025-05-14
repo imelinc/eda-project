@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import plotly.express as px 
 
 def fill_data(df):
     """
@@ -74,6 +75,30 @@ def make_bar_plot(file, plot_title, xlabel, ylabel, ax, kind):
     ax.tick_params(colors = "white")
     for spine in ax.spines.values():
         spine.set_color("white")
+
+def make_treemap(df, file, path, values, title, color):
+    custom_colors = {
+    "United States": "#7F1A1A",
+    "India": "#A35E2D",
+    "United Kingdom": "#625B7F",
+    "Japan" : "#A35E2D"
+    }
+
+    # Add a column to map colors
+    df["Color"] = df["country"].map(custom_colors)
+    
+    fig = px.treemap(
+    file,
+    path=path,
+    values=values,
+    title=title,
+    color=color, 
+    color_discrete_map=custom_colors
+    )
+    
+    treemap_customization(fig)
+    return fig
+    
 
 def treemap_customization(fig):
     fig.update_layout(

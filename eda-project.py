@@ -133,38 +133,9 @@ def domination_of_genres(df, movies_top_ten, tv_shows_top_ten):
     # Group by counries and genres
     tv_shows_grouped = tv_shows_df.groupby(["country", "listed_in"]).size().reset_index(name="count")
     
-    # Plot the treemaps
-    custom_colors = {
-    "United States": "#7F1A1A",
-    "India": "#A35E2D",
-    "United Kingdom": "#625B7F",
-    "Japan" : "#A35E2D"
-    }
-
-    # Add a column to map colors
-    df["Color"] = df["country"].map(custom_colors)
-    
-    fig_movies = px.treemap(
-    movies_grouped,
-    path=['country', 'listed_in'],
-    values='count',
-    title='Top 3 Countries - Genre Domination in Movies',
-    color='country', 
-    color_discrete_map=custom_colors
-    )
-
-    fig_shows = px.treemap(
-        tv_shows_grouped,
-        path=['country', 'listed_in'],
-        values='count',
-        title='Top 3 Countries - Genre Domination in TV Shows',
-        color='country',
-        color_discrete_map=custom_colors
-    )
-
-    
-    sf.treemap_customization(fig_movies)
-    sf.treemap_customization(fig_shows)
+    # Plotting and customizating the treemaps
+    fig_movies = sf.make_treemap(df.copy(), file = movies_grouped, path = ['country','listed_in'], values = 'count', title = 'Top 3 Countries - Genre Domination in Movies', color='country')
+    fig_shows = sf.make_treemap(df.copy(), file = movies_grouped, path = ['country','listed_in'], values = 'count', title = 'Top 3 Countries - Genre Domination in Movies', color='country')
     
     fig_movies.write_image("figs/movies_treemap.png", scale = 3)
     fig_shows.write_image("figs/shows_treemap.png", scale = 3)
