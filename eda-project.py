@@ -1,8 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
-import plotly.express as px
 import side_functions as sf
 
 # Plot the distribution of the different types of genres
@@ -139,7 +136,30 @@ def domination_of_genres(df, movies_top_ten, tv_shows_top_ten):
     
     fig_movies.write_image("figs/movies_treemap.png", scale = 3)
     fig_shows.write_image("figs/shows_treemap.png", scale = 3)
-        
+    
+
+def patterns_in_rating(df):
+    """
+    This function allows the insight of any pattern based of the rating of a movie or a tv show
+    by making different plots
+
+    Args:
+        df (pandas.DataFrame): The whole dataset
+    """
+    
+    movies_df = df[df['type'] == "Movie"].copy()
+    tv_shows_df = df[df['type'] == "TV Show"].copy()
+    
+    
+    
+    # Plotting the data
+    fig, (ax1, ax2) = plt.subplots(nrows = 1,
+                                   ncols = 2,
+                                   figsize = (20, 7),
+                                   facecolor = "#000000")
+
+    
+
     
 # Load the dataset
 df = pd.read_csv("data/netflix_titles.csv")
@@ -151,3 +171,4 @@ plot_genre_distribution(df)
 plot_distribution_of_years(df)
 movies_top_ten, tv_shows_top_ten = plot_countries_vs_genres(df)
 domination_of_genres(df, movies_top_ten, tv_shows_top_ten)
+patterns_in_rating(df)
