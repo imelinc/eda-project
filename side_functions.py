@@ -20,3 +20,15 @@ def make_pie(top_ten, title, legend_title, file_name):
     # Explicitly set the title color
     plt.setp(plt.gca().get_legend().get_title(), color='white')
     plt.savefig(f"figs/{file_name}.png", dpi = 800)
+
+
+def get_genre_counts(df):
+    # Divide the "listed_in" column into multiple rows with each genre
+    df.loc[:, "listed_in"] = df["listed_in"].str.split(",")
+    df_exploded = df.explode("listed_in")
+    df_exploded["listed_in"] = df_exploded["listed_in"].str.strip() 
+    
+    # Count the number of ocurrences of each genre
+    df_genre_counts = df_exploded['listed_in'].value_counts()
+    
+    return df_genre_counts

@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import squarify
 import side_functions as sf
 
 def filling_data(df):
@@ -34,19 +35,9 @@ def plot_genre_distribution(df):
     # Filter the dataframe for tv shows only
     tv_shows_df = df[df['type'] == 'TV Show'].copy()
     
-    # Divide the "listed_in" column into multiple rows with each genre
-    movies_df.loc[:, "listed_in"] = movies_df["listed_in"].str.split(",")
-    movies_exploded = movies_df.explode("listed_in")
-    movies_exploded["listed_in"] = movies_exploded["listed_in"].str.strip() 
-    
-    # Divide the "listed_in" column into multiple rows with each genre
-    tv_shows_df.loc[:, "listed_in"] = tv_shows_df["listed_in"].str.split(",")
-    tv_shows_exploded = tv_shows_df.explode("listed_in")
-    tv_shows_exploded["listed_in"] = tv_shows_exploded["listed_in"].str.strip() 
-    
-    # Count the number of ocurrences of each genre
-    movies_genre_counts = movies_exploded['listed_in'].value_counts()
-    tv_shows_genre_counts = tv_shows_exploded['listed_in'].value_counts()
+    # Get the number of ocurrences of each genre
+    movies_genre_counts = sf.get_genre_counts(movies_df)
+    tv_shows_genre_counts = sf.get_genre_counts(tv_shows_df)
     
     # Plotting the data
     fig, (ax1, ax2) = plt.subplots(nrows = 1,
