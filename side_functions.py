@@ -19,8 +19,8 @@ def fill_data(df):
 
 def make_pie(top_ten, title, legend_title, file_name):
     """
-    This function generates a pie chart using the provided data series, applies custom
-    styling with a dark theme, and saves the resulting figure to the 'figs' directory.
+    This function generates a pie chart using the provided data series and applies custom
+    styling.
     Args:
        top_ten (pandas.Series): A pandas Series containing the data to be plotted.
                                 The index of the Series will be used as labels in the legend.
@@ -51,6 +51,15 @@ def make_pie(top_ten, title, legend_title, file_name):
     plt.savefig(f"figs/{file_name}.png", dpi = 800)
 
 def expand_the_dataset(df, column):
+    """
+    This function expands the dataframe in multiple rows given a certain column
+    Args:
+        df (pandas.DataFrame): dataset
+        column (str): name of the column that we want to expand
+
+    Returns:
+        pandas.DataFrame: dataframe correctly expanded
+    """
     # Divide the column into multiple rows
     df.loc[:, column] = df[column].str.split(",")
     df_exploded = df.explode(column)
@@ -59,6 +68,12 @@ def expand_the_dataset(df, column):
     return df_exploded
 
 def get_counts_of_certain_column(df, column):
+    """
+    This function count the amount of values that are on the dataframe given a certain column
+    Args:
+        df (pandas.DataFrame): dataset
+        column (str): name of the column that we want to count values
+    """
     
     new_df = expand_the_dataset(df, column)
     # Count the number of ocurrences of each genre
