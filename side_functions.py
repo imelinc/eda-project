@@ -66,8 +66,11 @@ def get_counts_of_certain_column(df, column):
     
     return df_genre_counts
 
-def make_bar_plot(file, plot_title, xlabel, ylabel, ax, kind):
-    file.plot(kind=kind , ax=ax, color="#ad1d3c")
+def make_bar_plot(file, plot_title, xlabel, ylabel, ax, kind, need_custom_axes = False):
+    if not need_custom_axes:
+        file.plot(kind=kind , ax=ax, color="#7F1A1A", legend = False)
+    else:
+        file.plot(kind = kind, x = (file.columns.to_list())[0], y = (file.columns.to_list())[1], ax = ax, color = "#7F1A1A", legend = False)
     if kind == "barh":
        ax.invert_yaxis()
        ax.grid(True, axis='x', color='white', alpha=0.4)
@@ -133,4 +136,5 @@ def rating_vs_genre_plot(iterator, data_file):
     
     for i, genre in enumerate(iterator):
         data_to_plot = pd.DataFrame(list(data_file[genre].items()), columns=["Rating", "Count"])
-        make_bar_plot(data_to_plot, f"Rating Distribution for {genre}", "Ratings", "Count", axes[i], "bar")
+        make_bar_plot(data_to_plot, f"Rating Distribution for {genre}", "Ratings", "Count", axes[i], "bar", need_custom_axes = True)
+
