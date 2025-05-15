@@ -73,9 +73,9 @@ def make_bar_plot(file, plot_title, xlabel, ylabel, ax, kind):
     else:
        ax.grid(True, axis='y', color='white', alpha=0.4)
     ax.set_facecolor("#15130d")
-    ax.set_title(plot_title, color = "white")
-    ax.set_xlabel(xlabel, color = "white")
-    ax.set_ylabel(ylabel, color = "white")
+    ax.set_title(plot_title, color = "white", fontsize = 20)
+    ax.set_xlabel(xlabel, color = "white", fontsize = 12)
+    ax.set_ylabel(ylabel, color = "white", fontsize = 12)
     ax.tick_params(colors = "white")
     for spine in ax.spines.values():
         spine.set_color("white")
