@@ -177,33 +177,13 @@ def patterns_in_rating(df):
     top3_genres_movies = movies_expanded["listed_in"].value_counts().head(3).index
     top3_genres_tv_shows = tv_shows_expanded["listed_in"].value_counts().head(3).index
     
-    # Plotting the data for movies
-    fig, axes_movies = plt.subplots(nrows = 1,
-                            ncols = 3,
-                            figsize = (30, 7),
-                            facecolor = "#000000")
-    
-    axes_movies = axes_movies.flatten()
-    
-    for i, genre in enumerate(top3_genres_movies):
-        data_to_plot = pd.DataFrame(list(movies_data[genre].items()), columns=["Rating", "Count"])
-        sf.make_bar_plot(data_to_plot, f"Rating Distribution for {genre}", "Ratings", "Count", axes_movies[i], "bar")
+    sf.rating_vs_genre_plot(top3_genres_movies, movies_data) 
 
     plt.tight_layout()
     plt.subplots_adjust(wspace=0.2)
     plt.savefig("figs/grouped_figs/movies_ratings.png", dpi = 800)
     
-    # Plotting the data for shows
-    fig, axes_shows = plt.subplots(nrows = 1,
-                            ncols = 3,
-                            figsize = (30, 7),
-                            facecolor = "#000000")
-    
-    axes_shows = axes_shows.flatten()
-    
-    for i, genre in enumerate(top3_genres_tv_shows):
-        data_to_plot = pd.DataFrame(list(tv_shows_data[genre].items()), columns=["Rating", "Count"])
-        sf.make_bar_plot(data_to_plot, f"Rating Distribution for {genre}", "Ratings", "Count", axes_shows[i], "bar")
+    sf.rating_vs_genre_plot(top3_genres_tv_shows, tv_shows_data)
         
     plt.tight_layout()
     plt.subplots_adjust(wspace=0.2)

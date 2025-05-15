@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 import plotly.express as px 
 
 def fill_data(df):
@@ -120,3 +121,16 @@ def treemap_customization(fig):
             line=dict(width=1, color="white")  
         )
     )
+
+def rating_vs_genre_plot(iterator, data_file):
+    # Plotting the data for movies
+    fig, axes = plt.subplots(nrows = 1,
+                            ncols = 3,
+                            figsize = (30, 7),
+                            facecolor = "#000000")
+    
+    axes = axes.flatten()
+    
+    for i, genre in enumerate(iterator):
+        data_to_plot = pd.DataFrame(list(data_file[genre].items()), columns=["Rating", "Count"])
+        make_bar_plot(data_to_plot, f"Rating Distribution for {genre}", "Ratings", "Count", axes[i], "bar")
