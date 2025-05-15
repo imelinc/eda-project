@@ -150,6 +150,28 @@ def patterns_in_rating(df):
     movies_df = df[df['type'] == "Movie"].copy()
     tv_shows_df = df[df['type'] == "TV Show"].copy()
     
+    movies_expanded = sf.expand_the_dataset(movies_df, "listed_in")
+    tv_shows_expanded = sf.expand_the_dataset(tv_shows_df, "listed_in")
+    
+    movies_genres = movies_expanded["listed_in"].unique()
+    tv_shows_genres = tv_shows_expanded["listed_in"].unique()
+    
+    movies_data = {}
+    tv_shows_data = {}
+    
+    for genre in movies_genres:
+        # I get the dataset of each genre
+        genre_data = movies_expanded[movies_expanded["listed_in"] == genre]
+        
+        # Now i get the value count of the ratings for that genre
+        rating_count_m = genre_data["rating"].value_counts().to_dict()
+        movies_data[genre] = rating_count_m
+    
+    for genre in tv_shows_genres:
+        genre_data = tv_shows_expanded[tv_shows_expanded["listed_in"] == genre]
+        
+        rating_count_tv = genre_data["rating"].value_counts().to_dict()
+        tv_shows_data[genre] = rating_count_tv
     
     
     # Plotting the data
