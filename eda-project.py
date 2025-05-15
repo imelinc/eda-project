@@ -173,13 +173,57 @@ def patterns_in_rating(df):
         rating_count_tv = genre_data["rating"].value_counts().to_dict()
         tv_shows_data[genre] = rating_count_tv
     
+    # Now i'm gonna take the top 3 genres in movies and tv shows and we're gonna make some plots of it
+    top3_genres_movies = movies_expanded["listed_in"].value_counts().head(3).index
+    top3_genres_tv_shows = tv_shows_expanded["listed_in"].value_counts().head(3).index
     
-    # Plotting the data
-    fig, (ax1, ax2) = plt.subplots(nrows = 1,
-                                   ncols = 2,
-                                   figsize = (20, 7),
-                                   facecolor = "#000000")
-
+    # Plotting the data for movies
+    fig, axes_movies = plt.subplots(nrows = 1,
+                            ncols = 3,
+                            figsize = (30, 7),
+                            facecolor = "#000000")
+    
+    axes_movies = axes_movies.flatten()
+    
+    for i, genre in enumerate(top3_genres_movies):
+        data_to_plot = pd.DataFrame(list(movies_data[genre].items()), columns=["Rating", "Count"])
+        
+        data_to_plot.plot(kind = "bar", x = "Rating", y = "Count", ax=axes_movies[i], color="#7F1A1A")
+        
+        axes_movies[i].set_title(f"Rating Distribution for {genre}", color = "white", fontsize=20)
+        axes_movies[i].set_xlabel("Ratings", color="white", fontsize = 12)
+        axes_movies[i].set_ylabel("Count", color="white", fontsize = 12)
+        axes_movies[i].tick_params(colors = "white")
+        axes_movies[i].set_facecolor("#15130d")
+        axes_movies[i].grid(True, axis = "y", linestyle='--', alpha=0.3)
+        
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0.2)
+    plt.savefig("figs/grouped_figs/movies_ratings.png", dpi = 800)
+    
+    # Plotting the data for movies
+    fig, axes_shows = plt.subplots(nrows = 1,
+                            ncols = 3,
+                            figsize = (30, 7),
+                            facecolor = "#000000")
+    
+    axes_shows = axes_shows.flatten()
+    
+    for i, genre in enumerate(top3_genres_tv_shows):
+        data_to_plot = pd.DataFrame(list(tv_shows_data[genre].items()), columns=["Rating", "Count"])
+        
+        data_to_plot.plot(kind = "bar", x = "Rating", y = "Count", ax=axes_shows[i], color="#7F1A1A")
+        
+        axes_shows[i].set_title(f"Rating Distribution for {genre}", color = "white", fontsize=20)
+        axes_shows[i].set_xlabel("Ratings", color="white", fontsize = 12)
+        axes_shows[i].set_ylabel("Count", color="white", fontsize = 12)
+        axes_shows[i].tick_params(colors = "white")
+        axes_shows[i].set_facecolor("#15130d")
+        axes_shows[i].grid(True,axis = "y", linestyle='--', alpha=0.3)
+        
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0.2)
+    plt.savefig("figs/grouped_figs/shows_ratings.png", dpi = 800)
     
 
     
